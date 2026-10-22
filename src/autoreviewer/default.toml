@@ -1,0 +1,30 @@
+version = 1
+
+[scan]
+concurrency = 3
+timeout_seconds = 600
+max_output_bytes = 4194304
+excludes = ["vendor", "*.min.js"]
+
+[providers.router]
+base_url = "https://openrouter.ai/api/v1"
+api_key_env = "OPENROUTER_API_KEY"
+api_format = "openai-chat"
+
+[[models]]
+id = "reviewer-a"
+provider = "router"
+model = "replace-with-an-available-model-id"
+agent = "opencode"
+
+# Add another [[models]] table for every model you want to run in parallel.
+# Give each entry a unique id. Models may share a provider.
+
+[agents.opencode]
+command = ["opencode"]
+
+# Optional GitHub integration. Publish is a separate, explicit command.
+# [github]
+# repository = "owner/repo"
+# token_env = "GITHUB_TOKEN"
+# labels = []

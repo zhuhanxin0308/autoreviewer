@@ -1,0 +1,70 @@
+# Eight-model NVIDIA live-test reproduction. Install OpenCode and set NVIDIA_API_KEY.
+# API keys belong in the environment, never in this file.
+# This reproduces the tested pool; it is NOT a recommendation that all models work.
+# Observed batch: 5 completed, GPT-OSS failed output validation, GLM timed out.
+# DiffusionGemma returned HTTP 400 on a later tool turn despite passing a small probe.
+# See docs/live-tests/nvidia-parallel-2026-10-22.md for the complete record.
+# Concurrent execution does not guarantee successful audits or stable latency.
+# Availability, quotas, and pricing are controlled by NVIDIA and may change.
+version = 1
+
+[scan]
+concurrency = 8
+timeout_seconds = 300
+max_output_bytes = 4194304
+
+[providers.nvidia]
+base_url = "https://integrate.api.nvidia.com/v1"
+api_key_env = "NVIDIA_API_KEY"
+api_format = "openai-chat"
+
+[agents.opencode]
+command = ["opencode"]
+
+[[models]]
+id = "gpt-oss-20b"
+provider = "nvidia"
+model = "openai/gpt-oss-20b"
+agent = "opencode"
+
+[[models]]
+id = "nemotron-lightning"
+provider = "nvidia"
+model = "nvidia/nemotron-3.5-lightning-30b-a3b"
+agent = "opencode"
+
+[[models]]
+id = "nemotron-super-vl"
+provider = "nvidia"
+model = "nvidia/nemotron-3.5-super-vl-120b-a12b"
+agent = "opencode"
+
+[[models]]
+id = "nemotron-ultra"
+provider = "nvidia"
+model = "nvidia/nemotron-3-ultra-550b-a55b"
+agent = "opencode"
+
+[[models]]
+id = "step-5-preview"
+provider = "nvidia"
+model = "stepfun-ai/step-5-preview"
+agent = "opencode"
+
+[[models]]
+id = "muse-glimmer"
+provider = "nvidia"
+model = "meta/muse-glimmer-30b"
+agent = "opencode"
+
+[[models]]
+id = "glm-5-3"
+provider = "nvidia"
+model = "z-ai/glm-5.3"
+agent = "opencode"
+
+[[models]]
+id = "diffusiongemma"
+provider = "nvidia"
+model = "google/diffusiongemma-26b-a4b-it"
+agent = "opencode"

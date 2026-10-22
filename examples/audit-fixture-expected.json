@@ -1,0 +1,26 @@
+{
+  "purpose": "Expected behavior for a synthetic integration fixture, not a general security benchmark.",
+  "source": "audit-fixture/app.py",
+  "source_sha256": "9460bc205d4e9d0731b9ee8c2354bee47b841e8bf94f053495823d30eb58138c",
+  "expected_findings": [
+    {
+      "cwe": "CWE-89",
+      "function": "search_people",
+      "source_lines": [6, 7],
+      "reason": "Request parameter q is interpolated into SQL and passed to connection.execute without parameter binding."
+    },
+    {
+      "cwe": "CWE-22",
+      "function": "load_document",
+      "source_lines": [12, 13],
+      "reason": "Request parameter name is joined to document_root and read without verifying that the resolved path remains inside that root."
+    }
+  ],
+  "negative_controls": [
+    {
+      "function": "list_people",
+      "source_lines": [17, 18],
+      "reason": "The search term is bound as a SQL parameter; it must not be reported as SQL injection merely because it originated in a request."
+    }
+  ]
+}

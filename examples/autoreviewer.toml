@@ -1,0 +1,93 @@
+# API keys belong in environment variables, never in this file.
+version = 1
+
+[scan]
+concurrency = 3
+timeout_seconds = 600
+max_output_bytes = 4194304
+# Additional exclusions; built-in sensitive-file exclusions still apply.
+excludes = ["vendor", "dist", "coverage"]
+
+[providers.router]
+base_url = "https://openrouter.ai/api/v1"
+api_key_env = "OPENROUTER_API_KEY"
+api_format = "openai-chat"
+
+[[models]]
+id = "reviewer-a"
+provider = "router"
+model = "replace-with-available-model-id"
+agent = "opencode"
+
+# Add another model to run another independent review:
+# [[models]]
+# id = "reviewer-b"
+# provider = "router"
+# model = "replace-with-another-model-id"
+# agent = "opencode"
+
+[agents.opencode]
+command = ["opencode"]
+
+# Codex needs a Responses-compatible endpoint, not only Chat Completions.
+# [providers.responses]
+# base_url = "https://api.openai.com/v1"
+# api_key_env = "OPENAI_API_KEY"
+# api_format = "openai-responses"
+#
+# [[models]]
+# id = "codex-reviewer"
+# provider = "responses"
+# model = "replace-with-supported-model-id"
+# agent = "codex"
+#
+# [agents.codex]
+# command = ["codex"]
+
+# Claude Code >= 2.1.248; Anthropic-compatible root URL.
+# [providers.anthropic]
+# base_url = "https://api.anthropic.com"
+# api_key_env = "ANTHROPIC_API_KEY"
+# api_format = "anthropic"
+#
+# [[models]]
+# id = "claude-reviewer"
+# provider = "anthropic"
+# model = "replace-with-supported-model-id"
+# agent = "claude"
+#
+# [agents.claude]
+# command = ["claude"]
+
+# Gemini-compatible root URL; the SDK adds API version and resources.
+# [providers.google]
+# base_url = "https://generativelanguage.googleapis.com"
+# api_key_env = "GEMINI_API_KEY"
+# api_format = "gemini"
+#
+# [[models]]
+# id = "gemini-reviewer"
+# provider = "google"
+# model = "replace-with-supported-model-id"
+# agent = "gemini"
+#
+# [agents.gemini]
+# command = ["gemini"]
+
+# A trusted custom CLI must print findings JSON on stdout.
+# It receives AUTOREVIEWER_API_KEY in its environment, not argv.
+# [agents.custom]
+# command = ["my-audit-cli"]
+# args = ["--model", "{model}", "--base-url", "{base_url}", "--prompt", "{prompt}"]
+#
+# [[models]]
+# id = "custom-reviewer"
+# provider = "router"
+# model = "replace-with-supported-model-id"
+# agent = "custom"
+
+# Enable only when you intend to publish issues to this repository.
+# [github]
+# repository = "OWNER/REPO"
+# token_env = "GITHUB_TOKEN"
+# labels = []

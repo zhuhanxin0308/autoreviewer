@@ -1,0 +1,27 @@
+# Offline orchestration demo. This emits static fixture data, not a model review.
+# No credentials or network requests are used. Run from the repository root:
+# autoreviewer scan examples/demo-repository --config examples/demo.toml --output ./demo-result
+version = 1
+
+[scan]
+concurrency = 2
+timeout_seconds = 15
+
+[providers.fixture]
+base_url = "https://example.invalid/v1"
+api_format = "openai-chat"
+
+[agents.custom]
+command = ["python3", "-c", 'import json; print(json.dumps(dict(findings=[dict(title="DEMO ONLY: static fixture finding", severity="info", file="app.py", line=1, description="Fixed demonstration data; no model or security analysis was performed.", evidence="The fixture file begins with: def greeting(name):", recommendation="Replace the custom fixture with a real CLI and configured model to perform an audit.", confidence="low")])))']
+
+[[models]]
+id = "demo-a"
+provider = "fixture"
+model = "offline-fixture-a"
+agent = "custom"
+
+[[models]]
+id = "demo-b"
+provider = "fixture"
+model = "offline-fixture-b"
+agent = "custom"
